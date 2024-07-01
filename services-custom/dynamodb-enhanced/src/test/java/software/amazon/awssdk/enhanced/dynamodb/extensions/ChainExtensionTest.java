@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static software.amazon.awssdk.enhanced.dynamodb.functionaltests.models.FakeItem.createUniqueFakeItem;
+import static software.amazon.awssdk.enhanced.dynamodb.mapper.AttributeMapping.SHALLOW;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -73,7 +74,7 @@ public class ChainExtensionTest {
     private final List<Map<String, AttributeValue>> fakeItems =
         IntStream.range(0, 4)
                  .mapToObj($ -> createUniqueFakeItem())
-                 .map(fakeItem -> FakeItem.getTableSchema().itemToMap(fakeItem, true))
+                 .map(fakeItem -> FakeItem.getTableSchema().itemToMap(fakeItem, true, SHALLOW))
                  .collect(toList());
 
     @Test
