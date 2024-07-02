@@ -41,6 +41,7 @@ import software.amazon.awssdk.enhanced.dynamodb.Expression;
 import software.amazon.awssdk.enhanced.dynamodb.OperationContext;
 import software.amazon.awssdk.enhanced.dynamodb.TableMetadata;
 import software.amazon.awssdk.enhanced.dynamodb.functionaltests.models.FakeItem;
+import software.amazon.awssdk.enhanced.dynamodb.internal.DynamoDBEnhancedRequestConfiguration;
 import software.amazon.awssdk.enhanced.dynamodb.internal.extensions.ChainExtension;
 import software.amazon.awssdk.enhanced.dynamodb.internal.extensions.DefaultDynamoDbExtensionContext;
 import software.amazon.awssdk.enhanced.dynamodb.internal.operations.DefaultOperationContext;
@@ -74,7 +75,8 @@ public class ChainExtensionTest {
     private final List<Map<String, AttributeValue>> fakeItems =
         IntStream.range(0, 4)
                  .mapToObj($ -> createUniqueFakeItem())
-                 .map(fakeItem -> FakeItem.getTableSchema().itemToMap(fakeItem, true, SHALLOW))
+                 .map(fakeItem -> FakeItem.getTableSchema().itemToMap(fakeItem, true,
+                                                                      new DynamoDBEnhancedRequestConfiguration(SHALLOW)))
                  .collect(toList());
 
     @Test
