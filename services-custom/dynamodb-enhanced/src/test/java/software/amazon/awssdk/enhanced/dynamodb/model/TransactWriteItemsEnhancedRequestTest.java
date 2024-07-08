@@ -96,8 +96,7 @@ public class TransactWriteItemsEnhancedRequestTest {
                                              .addPutItem(fakeItemMappedTable, fakeItem)
                                              .addDeleteItem(fakeItemMappedTable, fakeItem)
                                              .addUpdateItem(fakeItemMappedTable, fakeItem)
-                                             .addConditionCheck(fakeItemMappedTable,
-                                                                r -> r.key(k -> k.partitionValue(fakeItem.getId()))
+                                             .addConditionCheck(fakeItemMappedTable, r -> r.key(k -> k.partitionValue(fakeItem.getId()))
                                                                                            .conditionExpression(conditionExpression))
                                              .build();
 
@@ -130,11 +129,9 @@ public class TransactWriteItemsEnhancedRequestTest {
         TransactWriteItemsEnhancedRequest builtObject =
             TransactWriteItemsEnhancedRequest.builder()
                                              .addPutItem(fakeItemMappedTable, fakeItem)
-                                             .addDeleteItem(fakeItemMappedTable,
-                                                            Key.builder().partitionValue(fakeItem.getId()).build())
+                                             .addDeleteItem(fakeItemMappedTable, Key.builder().partitionValue(fakeItem.getId()).build())
                                              .addUpdateItem(fakeItemMappedTable, fakeItem)
-                                             .addConditionCheck(fakeItemMappedTable,
-                                                                r -> r.key(k -> k.partitionValue(fakeItem.getId()))
+                                             .addConditionCheck(fakeItemMappedTable, r -> r.key(k -> k.partitionValue(fakeItem.getId()))
                                                                                            .conditionExpression(conditionExpression))
                                              .build();
 
@@ -158,16 +155,16 @@ public class TransactWriteItemsEnhancedRequestTest {
                                                                         .key(k -> k.partitionValue(fakeItem.getId()))
                                                                         .build();
         UpdateItemEnhancedRequest<FakeItem> updateItem = UpdateItemEnhancedRequest.builder(FakeItem.class)
-                                                                                  .item(fakeItem).build();
+                                                                        .item(fakeItem).build();
         Expression conditionExpression = Expression.builder()
                                                    .expression("#attribute = :attribute")
                                                    .expressionValues(singletonMap(":attribute", stringValue("0")))
                                                    .expressionNames(singletonMap("#attribute", "attribute"))
                                                    .build();
         ConditionCheck<FakeItem> conditionCheck = ConditionCheck.builder()
-                                                                .key(k -> k.partitionValue(fakeItem.getId()))
-                                                                .conditionExpression(conditionExpression)
-                                                                .build();
+                                                      .key(k -> k.partitionValue(fakeItem.getId()))
+                                                      .conditionExpression(conditionExpression)
+                                                      .build();
 
         TransactWriteItemsEnhancedRequest builtObject =
             TransactWriteItemsEnhancedRequest.builder()
