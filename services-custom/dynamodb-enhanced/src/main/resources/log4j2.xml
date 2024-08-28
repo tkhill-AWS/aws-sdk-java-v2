@@ -1,0 +1,26 @@
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c:%L - %m%n" />
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="WARN">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+        <Logger name="software.amazon.awssdk" level="WARN" />
+        <Logger name="software.amazon.awssdk.request" level="INFO" />
+        <logger name="software.amazon.awssdk.services.sso" level="INFO"/>
+        <logger name="software.amazon.awssdk.services.ssooidc" level="INFO"/>
+        <Logger name="org.apache.http.wire" level="INFO" />
+        <logger name="org.example" level="INFO" />
+        <logger name="dynamodbignorenulls" level="INFO" />
+        <logger name="ddbattrfilter" level="INFO" />
+        <logger name="software.amazon.awssdk.enhanced.dynamodb" level="INFO"/>
+        <Logger name="software.amazon.awssdk.enhanced.dynamodb.beans" level="INFO" />
+        <Logger name="io.netty.handler.logging" level="INFO" />
+        <Logger name="io.netty.handler.codec.http2.Http2FrameLogger" level="INFO" />
+        <Logger name="org.apache.http.wire" level="INFO" />
+    </Loggers>
+</Configuration>
