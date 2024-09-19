@@ -12,6 +12,7 @@ import software.amazon.awssdk.core.internal.waiters.ResponseOrException;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.IgnoreNullsMode;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DescribeTableResponse;
@@ -119,7 +120,8 @@ public class UpdateItemForNestedComponents {
 
         Person updatedPerson = personDynamoDbTable.updateItem(r -> r
             .item(person1ForUpdate)
-            .ignoreNulls(Boolean.TRUE) // Retain other values.
+      //      .ignoreNulls(Boolean.TRUE) // Retain other values.
+            .ignoreNullsMode(IgnoreNullsMode.SCALAR_ONLY)
             .build());
 
         // Scalar attribute updated.
@@ -147,6 +149,12 @@ public class UpdateItemForNestedComponents {
         person.setId(1);
         person.setFirstName("first name");
 
+        Address mainAddress = new Address();
+        mainAddress.setState("First");
+        mainAddress.setCity("First");
+        mainAddress.setZipCode("First");
+        mainAddress.setStreet("First");
+
         List<PhoneNumber> phoneNumbers = new ArrayList<>();
         PhoneNumber mobilePhone = new PhoneNumber();
         mobilePhone.setNumber("111-111-1111");
@@ -159,33 +167,35 @@ public class UpdateItemForNestedComponents {
 
         // Assume the following code runs at a later time.
 
-        // Get the item for updating.
-        Person personFromDDB = personDynamoDbTable.getItem(r->r
-            .key(k->k.partitionValue(person.getId()))
-            .build());
-
         // Update the list of phone numbers.
-        List<PhoneNumber> phoneNumbersFromDDB = personFromDDB.getPhoneNumbers();
-        PhoneNumber mobileFromDBb = phoneNumbersFromDDB.get(0);
-        mobileFromDBb.setType("cell");
+        Person person1ForUpdate = new Person();
+        person1ForUpdate.setId(1); // Partition key must be specified.
+
+        PhoneNumber mobilePhoneForUpdate = new PhoneNumber();
+        mobilePhoneForUpdate.setType("cell");
+
+        List<PhoneNumber> phoneNumbersForUpdate = new ArrayList<>();
+        phoneNumbersForUpdate.add(mobilePhoneForUpdate);
 
         PhoneNumber landLine = new PhoneNumber();
         landLine.setType("home");
         landLine.setNumber("000-000-0000");
-        phoneNumbersFromDDB.add(landLine);
+        phoneNumbersForUpdate.add(landLine);
+        person1ForUpdate.setPhoneNumbers(phoneNumbersForUpdate);
 
         // Add a new mainAddress.
-        Address mainAddress = new Address();
-        //mainAddress.setState("CA");
-        mainAddress.setCity("LA");
-        mainAddress.setZipCode("98765");
-        mainAddress.setStreet("123 Main St");
+        Address mainAddressForUpdate = new Address();
+        mainAddress.setState("Second");
+        mainAddressForUpdate.setCity("Second");
+        mainAddressForUpdate.setZipCode("Second");
+        mainAddressForUpdate.setStreet("Second");
 
-        personFromDDB.setMainAddress(mainAddress);
+        person1ForUpdate.setMainAddress(mainAddressForUpdate);
 
         Person updatedPerson = personDynamoDbTable.updateItem(r->r
-                .item(personFromDDB)
-                .ignoreNulls(Boolean.FALSE)
+                .item(person1ForUpdate)
+              //  .ignoreNulls(Boolean.FALSE)
+                .ignoreNullsMode(IgnoreNullsMode.SCALAR_ONLY)
                 .build());
 
         // The phone number list has been updated.
