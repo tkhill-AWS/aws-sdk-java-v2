@@ -185,7 +185,7 @@ public class UpdateItemForNestedComponents {
 
         // Add a new mainAddress.
         Address mainAddressForUpdate = new Address();
-        mainAddress.setState("Second");
+        mainAddressForUpdate.setState("Second");
         mainAddressForUpdate.setCity("Second");
         mainAddressForUpdate.setZipCode("Second");
         mainAddressForUpdate.setStreet("Second");
